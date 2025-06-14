@@ -15,9 +15,9 @@ const ThemeSwitcher = ({ className }: { className?: string }) => {
       className={cn("text-white", className)}
     >
       {theme === "dark" ? (
-        <Sun className="h-5 w-5" onClick={() => setTheme("light")} />
+        <Sun className="h-5 w-5" />
       ) : (
-        <Moon className="h-5 w-5" onClick={() => setTheme("dark")} />
+        <Moon className="h-5 w-5" />
       )}
     </Button>
   );

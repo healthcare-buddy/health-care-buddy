@@ -40,6 +40,7 @@ const SignInSchema = z.object({
 
 const SignInForm = () => {
   const [isLoading, setisLoading] = useState(false);
+  const [showPass, setShowPass] = useState<"text" | "password">("password");
   const router = useRouter();
 
   const form = useForm<z.infer<typeof SignInSchema>>({
@@ -115,11 +116,24 @@ const SignInForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Password</FormLabel>
+                        <button
+                          type="button"
+                          className="text-xs flex items-center gap-2 cursor-pointer"
+                          onClick={() =>
+                            setShowPass(
+                              showPass === "password" ? "text" : "password"
+                            )
+                          }
+                        >
+                          {showPass === "password" ? "Show Pass" : "Hide Pass"}
+                        </button>
+                      </div>
                       <FormControl>
                         <Input
                           placeholder="Password"
-                          type="password"
+                          type={showPass}
                           {...field}
                         />
                       </FormControl>

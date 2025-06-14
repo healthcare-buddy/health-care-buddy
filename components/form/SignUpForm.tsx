@@ -146,7 +146,7 @@ const SignUpForm = () => {
                         <FormLabel>Password</FormLabel>
                         <button
                           type="button"
-                          className="text-xs flex items-center gap-2"
+                          className="text-xs flex items-center gap-2 cursor-pointer"
                           onClick={() =>
                             setShowPass(
                               showPass === "password" ? "text" : "password"
