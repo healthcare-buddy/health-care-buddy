@@ -3,7 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  // provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -17,6 +18,12 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+
+  role           String?
+  banned         Boolean?
+  banReason      String?
+  banExpires     DateTime?
+  PatientProfile PatientProfile?
 
   @@unique([email])
   @@map("user")
@@ -32,6 +39,8 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
 
   @@unique([token])
   @@map("session")
@@ -65,4 +74,95 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model PatientProfile {
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  age                Int?
+  gender             String?
+  phoneNumber        String?
+  emergencyContact   String?
+  emergencyPhone     String?
+  languagePreference String   @default("en")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dischargeSummaries DischargeSummary[]
+  followUpPlans      FollowUpPlan[]
+  notifications      Notification[]
+}
+
+model DischargeSummary {
+  id              String   @id @default(cuid())
+  patientId       String
+  originalContent String // Original uploaded content
+  fileType        String // "pdf", "image", "text"
+  filePath        String? // Path to uploaded file if applicable
+  parsedData      String // JSON string of parsed data
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  patient       PatientProfile @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  followUpPlans FollowUpPlan[]
+}
+
+model FollowUpPlan {
+  id                 String   @id @default(cuid())
+  patientId          String
+  dischargeSummaryId String
+  planData           String // JSON string of the complete plan
+  isActive           Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  patient             PatientProfile       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  dischargeSummary    DischargeSummary     @relation(fields: [dischargeSummaryId], references: [id], onDelete: Cascade)
+  medicationReminders MedicationReminder[]
+  planItems           FollowUpPlanItem[]
+}
+
+model FollowUpPlanItem {
+  id            String   @id @default(cuid())
+  planId        String
+  type          String // "appointment", "test", "medication", "general"
+  title         String
+  description   String?
+  scheduledDate DateTime
+  status        String   @default("pending") // "pending", "completed", "missed"
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  plan FollowUpPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+}
+
+model MedicationReminder {
+  id             String   @id @default(cuid())
+  planId         String
+  medicationName String
+  dosage         String
+  frequency      String
+  timeOfDay      String // "morning", "afternoon", "evening", "night"
+  specificTime   String? // "08:00", "14:00", etc.
+  isActive       Boolean  @default(true)
+  smsEnabled     Boolean  @default(false)
+  pushEnabled    Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  plan FollowUpPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  patientId String
+  type      String // "medication", "appointment", "test", "general"
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  sentAt    DateTime @default(now())
+
+  patient PatientProfile @relation(fields: [patientId], references: [id], onDelete: Cascade)
 }

@@ -1,8 +1,19 @@
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { auth } from "@/lib/auth";
 import { LucideHospital } from "lucide-react";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session) {
+    return redirect("/dashboard");
+  }
+
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
