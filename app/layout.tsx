@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
-import Footer from "@/components/general/Footer";
+import { Navbar } from "@/components/Navbar";
 
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "HealthCare Buddy",
@@ -27,17 +24,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${ibmPlexSans.className}  antialiased`}>
+    // <html lang="en">
+    //   <body className={`${ibmPlexSans.className}  antialiased`}>
+    //     <ThemeProvider
+    //       attribute={"class"}
+    //       defaultTheme={"system"}
+    //       enableSystem={true}
+    //       disableTransitionOnChange={true}
+    //     >
+    //       {children}
+    //       <Footer />
+    //       <Toaster richColors closeButton position="top-center" />
+    //     </ThemeProvider>
+    //   </body>
+    // </html>
+
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
         <ThemeProvider
-          attribute={"class"}
-          defaultTheme={"system"}
-          enableSystem={true}
-          disableTransitionOnChange={true}
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          {children}
-          <Footer />
-          <Toaster richColors closeButton position="top-center" />
+          <div className="min-h-screen bg-background">
+            <Navbar />
+            <main className="container mx-auto px-4 py-8">{children}</main>
+          </div>
+          <Toaster richColors closeButton />
         </ThemeProvider>
       </body>
     </html>

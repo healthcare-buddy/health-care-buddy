@@ -6,17 +6,18 @@ import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-const SignOutButton = () => {
+const SignOutButton = ({ className }: { className?: string }) => {
   const router = useRouter();
 
   async function SignOut() {
     await authClient.signOut();
     toast.success("You have successfully signed out.");
     router.push("/");
+    router.refresh();
   }
 
   return (
-    <Button onClick={SignOut} variant={"destructive"}>
+    <Button onClick={SignOut} variant={"destructive"} className={className}>
       Sign Out <LogOut />
     </Button>
   );

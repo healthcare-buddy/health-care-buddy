@@ -65,6 +65,7 @@ const SignUpForm = () => {
     if (success) {
       toast.success(message as string);
       router.push("/dashboard");
+      router.refresh();
     } else {
       toast.error(message as string);
     }
