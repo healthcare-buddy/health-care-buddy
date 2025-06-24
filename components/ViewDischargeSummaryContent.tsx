@@ -24,6 +24,7 @@ import {
 import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ViewDischargeSummarySkeleton } from "./LoadingSkeleton";
 
 interface DischargeSummary {
   id: string;
@@ -182,7 +183,7 @@ export function ViewDischargeSummaryContent({
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <ViewDischargeSummarySkeleton />;
   }
 
   if (!summary) {

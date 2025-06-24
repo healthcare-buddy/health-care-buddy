@@ -114,3 +114,16 @@ export function FollowUpPlanSkeleton() {
     </div>
   );
 }
+
+export function ViewDischargeSummarySkeleton() {
+  return (
+    <div className="space-y-6">
+      <Skeleton className="h-[100px] rounded-lg" />
+      <div className="grid gap-4 md:grid-cols-2">
+        <Skeleton className="h-[200px] rounded-lg" />
+        <Skeleton className="h-[200px] rounded-lg" />
+      </div>
+      <Skeleton className="h-[300px] rounded-lg" />
+    </div>
+  );
+}
