@@ -1,12 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Heart,
   Brain,
   Calendar,
@@ -16,6 +10,7 @@ import {
   Shield,
   Globe,
 } from "lucide-react";
+import TiltedCard from "@/components/ui/tilted-card";
 
 export default function HomePage() {
   return (
@@ -58,71 +53,71 @@ export default function HomePage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <Brain className="h-8 w-8 text-primary mb-2" />
-              <CardTitle>AI Discharge Summary Parser</CardTitle>
-              <CardDescription>
-                Uses NLP to extract key data from discharge documents and
-                summarize medical terms in simple language
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <TiltedCard
+            icon={<Brain className="h-8 w-8" />}
+            title="AI Discharge Summary Parser"
+            description="Uses NLP to extract key data from discharge documents and summarize medical terms in simple language"
+            containerHeight="180px"
+            rotateAmplitude={10}
+            scaleOnHover={1.05}
+            showMobileWarning={false}
+            showTooltip={false}
+          />
 
-          <Card>
-            <CardHeader>
-              <Calendar className="h-8 w-8 text-primary mb-2" />
-              <CardTitle>Personalized Follow-Up Plans</CardTitle>
-              <CardDescription>
-                Auto-generates customized follow-up schedules aligned with
-                clinical guidelines (ICMR, WHO)
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <TiltedCard
+            icon={<Calendar className="h-8 w-8" />}
+            title="Personalized Follow-Up Plans"
+            description="Auto-generates customized follow-up schedules aligned with clinical guidelines (ICMR, WHO)"
+            containerHeight="180px"
+            rotateAmplitude={10}
+            scaleOnHover={1.05}
+            showMobileWarning={false}
+            showTooltip={false}
+          />
 
-          <Card>
-            <CardHeader>
-              <Pill className="h-8 w-8 text-primary mb-2" />
-              <CardTitle>Medication Reminders</CardTitle>
-              <CardDescription>
-                Daily reminders with dosage, timing, and side-effect warnings in
-                your preferred language
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <TiltedCard
+            icon={<Pill className="h-8 w-8" />}
+            title="Medication Reminders"
+            description="Daily reminders with dosage, timing, and side-effect warnings in your preferred language"
+            containerHeight="180px"
+            rotateAmplitude={10}
+            scaleOnHover={1.05}
+            showMobileWarning={false}
+            showTooltip={false}
+          />
 
-          <Card>
-            <CardHeader>
-              <MessageSquare className="h-8 w-8 text-primary mb-2" />
-              <CardTitle>Multilingual Voice Assistant</CardTitle>
-              <CardDescription>
-                AI nurse explains follow-up plans verbally in Hindi, English, or
-                Gujarati
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <TiltedCard
+            icon={<MessageSquare className="h-8 w-8" />}
+            title="Multilingual Voice Assistant"
+            description="AI nurse explains follow-up plans verbally in Hindi, English, or Gujarati"
+            containerHeight="180px"
+            rotateAmplitude={10}
+            scaleOnHover={1.05}
+            showMobileWarning={false}
+            showTooltip={false}
+          />
 
-          <Card>
-            <CardHeader>
-              <BarChart3 className="h-8 w-8 text-primary mb-2" />
-              <CardTitle>Progress Tracking</CardTitle>
-              <CardDescription>
-                Comprehensive dashboard to monitor appointments, medications,
-                and recovery progress
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <TiltedCard
+            icon={<BarChart3 className="h-8 w-8" />}
+            title="Progress Tracking"
+            description="Comprehensive dashboard to monitor appointments, medications, and recovery progress"
+            containerHeight="180px"
+            rotateAmplitude={10}
+            scaleOnHover={1.05}
+            showMobileWarning={false}
+            showTooltip={false}
+          />
 
-          <Card>
-            <CardHeader>
-              <Shield className="h-8 w-8 text-primary mb-2" />
-              <CardTitle>Automated Scheduling</CardTitle>
-              <CardDescription>
-                Seamless appointment booking with hospital calendars and
-                SMS/email confirmations
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <TiltedCard
+            icon={<Shield className="h-8 w-8" />}
+            title="Automated Scheduling"
+            description="Seamless appointment booking with hospital calendars and SMS/email confirmations"
+            containerHeight="180px"
+            rotateAmplitude={10}
+            scaleOnHover={1.05}
+            showMobileWarning={false}
+            showTooltip={false}
+          />
         </div>
       </section>
 
