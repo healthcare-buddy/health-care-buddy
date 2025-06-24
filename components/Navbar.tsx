@@ -18,7 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Moon, Sun, Heart, User, Settings } from "lucide-react";
+import { Menu, Moon, Sun, Heart, User, Plus } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import SignOutButton from "./form/SignOutButton";
 import { usePathname } from "next/navigation";
@@ -130,9 +130,9 @@ export function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/settings">
-                      <Settings className="mr-2 h-4 w-4" />
-                      Settings
+                    <Link href="/discharge-summary">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Discharge Summary
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -221,6 +221,24 @@ export function Navbar() {
                             Profile
                           </Button>
                         </Link>
+                        <Link
+                          href="/discharge-summary"
+                          className="flex items-center text-sm font-medium transition-colors hover:text-primary py-2 cursor-pointer"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <Button
+                            variant={
+                              pathname === "/discharge-summary"
+                                ? "default"
+                                : "secondary"
+                            }
+                            className="justify-start w-full cursor-pointer"
+                          >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Discharge Summary
+                          </Button>
+                        </Link>
+
                         <SignOutButton className="w-full cursor-pointer text-white mt-2" />
                       </div>
                     </>

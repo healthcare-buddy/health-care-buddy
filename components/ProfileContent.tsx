@@ -612,8 +612,8 @@ export function ProfileContent({ userId }: ProfileContentProps) {
 
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center justify-between max-sm:flex-col max-sm:gap-4 ">
+            <div className="flex flex-col max-sm:items-center gap-2 max-sm:text-center">
               <CardTitle className="flex items-center">
                 <FileText className="mr-2 h-5 w-5" />
                 Discharge Summaries ({dischargeSummaries.length})
@@ -622,7 +622,7 @@ export function ProfileContent({ userId }: ProfileContentProps) {
                 Manage your uploaded discharge summaries and medical documents
               </CardDescription>
             </div>
-            <Button asChild>
+            <Button asChild className="max-sm:w-full">
               <Link href="/discharge-summary">
                 <Plus className="mr-2 h-4 w-4" />
                 Add New Summary
