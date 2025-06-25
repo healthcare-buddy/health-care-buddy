@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { AIAssistantContent } from "@/components/AiAssistantContent";
+import { AIAssistantContent } from "@/components/user/AiAssistantContent";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function AIAssistantPage() {

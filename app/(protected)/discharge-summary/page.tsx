@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { DischargeSummaryContent } from "@/components/DischargeSummaryContent";
+import { DischargeSummaryContent } from "@/components/user/DischargeSummaryContent";
 import { DischargeSummarySkeleton } from "@/components/LoadingSkeleton";
 
 export default async function DischargeSummaryPage() {

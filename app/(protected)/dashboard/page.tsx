@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { DashboardSkeleton } from "@/components/LoadingSkeleton";
-import { DashboardContent } from "@/components/DashboardContext";
+import { DashboardContent } from "@/components/user/DashboardContent";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { ViewFollowUpPlanContent } from "@/components/ViewFollowUpPlanContent";
+import { ViewFollowUpPlanContent } from "@/components/user/ViewFollowUpPlanContent";
 
 interface ViewFollowUpPlanPageProps {
   params: Promise<{ summaryId: string }>;
