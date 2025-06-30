@@ -25,7 +25,7 @@ import {
 import { toast } from "sonner";
 import type { Patient } from "@/types";
 import Link from "next/link";
-import { FollowUpPlanSkeleton } from "./LoadingSkeleton";
+import { FollowUpPlanSkeleton } from "@/components/LoadingSkeleton";
 
 interface FollowUpPlanContentProps {
   userId: string;
@@ -183,13 +183,13 @@ export function FollowUpPlanContent({ userId }: FollowUpPlanContentProps) {
             {dischargeSummaries.map((summary) => (
               <div
                 key={summary.id}
-                className="flex items-center justify-between p-4 border rounded-lg"
+                className="flex max-sm:flex-col max-sm:space-y-3 items-center justify-between p-4 border rounded-lg"
               >
-                <div className="flex items-center space-x-3 flex-1">
+                <div className="flex items-center space-x-3 flex-1 text-wrap">
                   <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-sm">{summary.fileName}</p>
-                    <p className="text-xs text-muted-foreground truncate">
+                    <p className="text-xs text-muted-foreground truncate text-wrap">
                       {summary.diagnosis.substring(0, 80)}...
                     </p>
                     <p className="text-xs text-muted-foreground">

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { FollowUpPlanContent } from "@/components/FollowUpPlanContent";
+import { FollowUpPlanContent } from "@/components/user/FollowUpPlanContent";
 import { FollowUpPlanSkeleton } from "@/components/LoadingSkeleton";
 
 export default async function FollowUpPlanPage() {

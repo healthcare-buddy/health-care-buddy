@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { ProgressSkeleton } from "./LoadingSkeleton";
+import { ProgressSkeleton } from "../LoadingSkeleton";
 import { generateProgressReportPDF } from "@/lib/pdf-generator";
 
 interface ProgressContentProps {

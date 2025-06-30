@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { ProgressContent } from "@/components/ProgressContent";
+import { ProgressContent } from "@/components/user/ProgressContent";
 import { ProgressSkeleton } from "@/components/LoadingSkeleton";
 
 export default async function ProgressPage() {

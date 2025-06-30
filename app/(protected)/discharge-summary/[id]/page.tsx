@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { ViewDischargeSummaryContent } from "@/components/ViewDischargeSummaryContent";
+import { ViewDischargeSummaryContent } from "@/components/user/ViewDischargeSummaryContent";
 import { ViewDischargeSummarySkeleton } from "@/components/LoadingSkeleton";
 
 interface ViewDischargeSummaryPageProps {

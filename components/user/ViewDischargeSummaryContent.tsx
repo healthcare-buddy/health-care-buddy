@@ -24,7 +24,7 @@ import {
 import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ViewDischargeSummarySkeleton } from "./LoadingSkeleton";
+import { ViewDischargeSummarySkeleton } from "../LoadingSkeleton";
 
 interface DischargeSummary {
   id: string;

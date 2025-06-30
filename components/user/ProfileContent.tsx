@@ -359,7 +359,7 @@ import Link from "next/link";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileSkeleton } from "./LoadingSkeleton";
+import { ProfileSkeleton } from "../LoadingSkeleton";
 
 interface DischargeSummary {
   id: string;
@@ -636,7 +636,7 @@ export function ProfileContent({ userId }: ProfileContentProps) {
               {dischargeSummaries.map((summary) => (
                 <div
                   key={summary.id}
-                  className="flex items-center justify-between p-4 border rounded-lg"
+                  className="flex max-md:flex-col max-md:space-y-2 items-center justify-between p-4 border rounded-lg"
                 >
                   <div className="flex items-center space-x-3">
                     <FileText className="h-5 w-5 text-muted-foreground" />
@@ -651,22 +651,24 @@ export function ProfileContent({ userId }: ProfileContentProps) {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 max-md:flex-col space-y-2 justify-center">
                     <Badge variant="secondary">Processed</Badge>
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href={`/discharge-summary/${summary.id}`}>
-                        <Eye className="mr-1 h-3 w-3" />
-                        View
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => deleteSummary(summary.id)}
-                    >
-                      <Trash2 className="mr-1 h-3 w-3" />
-                      Delete
-                    </Button>
+                    <div className="flex items-center justify-center gap-2 max-md:w-full ">
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/discharge-summary/${summary.id}`}>
+                          <Eye className="mr-1 h-3 w-3" />
+                          View
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => deleteSummary(summary.id)}
+                      >
+                        <Trash2 className="mr-1 h-3 w-3" />
+                        Delete
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}

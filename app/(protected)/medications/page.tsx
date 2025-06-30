@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { MedicationsSkeleton } from "@/components/LoadingSkeleton";
-import { MedicationsContent } from "@/components/MedicationsContent";
+import { MedicationsContent } from "@/components/user/MedicationsContent";
 
 export default async function MedicationsPage() {
   const session = await auth.api.getSession({

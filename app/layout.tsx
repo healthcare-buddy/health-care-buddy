@@ -24,21 +24,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <html lang="en">
-    //   <body className={`${ibmPlexSans.className}  antialiased`}>
-    //     <ThemeProvider
-    //       attribute={"class"}
-    //       defaultTheme={"system"}
-    //       enableSystem={true}
-    //       disableTransitionOnChange={true}
-    //     >
-    //       {children}
-    //       <Footer />
-    //       <Toaster richColors closeButton position="top-center" />
-    //     </ThemeProvider>
-    //   </body>
-    // </html>
-
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider

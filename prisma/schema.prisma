@@ -19,6 +19,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  isActive Boolean @default(true)
+
   role       String?
   banned     Boolean?
   banReason  String?

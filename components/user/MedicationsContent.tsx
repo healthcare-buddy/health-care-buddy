@@ -28,7 +28,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { toast } from "sonner";
-import { MedicationsSkeleton } from "./LoadingSkeleton";
+import { MedicationsSkeleton } from "../LoadingSkeleton";
 
 interface MedicationsContentProps {
   userId: string;
