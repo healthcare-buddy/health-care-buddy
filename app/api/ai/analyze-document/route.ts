@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,8 +27,6 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
     const base64 = buffer.toString("base64");
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
     const prompt = `
     Analyze this medical discharge summary document and extract the following information in JSON format:
     {
@@ -50,9 +48,19 @@ export async function POST(request: NextRequest) {
       },
     };
 
-    const result = await model.generateContent([prompt, imagePart]);
-    const response = await result.response;
-    const text = response.text();
+    const result = await genAI.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: prompt }, imagePart],
+        },
+      ],
+    });
+
+    const text =
+      result.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "Failed to generate response";
 
     // Parse the JSON response
     let analysisResult;
