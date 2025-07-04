@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { ParticlesBG } from "@/components/ParticlesBg";
 
 export default async function ProtectedLayout({
   children,
@@ -24,7 +25,10 @@ export default async function ProtectedLayout({
   return (
     <SidebarProvider>
       <AppSidebar user={session.user} />
-      <SidebarInset>{children}</SidebarInset>
+      <SidebarInset>
+        <ParticlesBG />
+        <div className="relative z-50">{children}</div>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

@@ -54,6 +54,9 @@ export function AIAssistantContent({ userId }: AIAssistantContentProps) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [streamingMessageId, setStreamingMessageId] = useState<string | null>(
+    null
+  );
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,6 +65,14 @@ export function AIAssistantContent({ userId }: AIAssistantContentProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Scroll to bottom when streaming
+  useEffect(() => {
+    if (streamingMessageId) {
+      const timer = setTimeout(scrollToBottom, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [streamingMessageId, messages]);
 
   // Auto-focus input on mount
   useEffect(() => {
@@ -80,8 +91,22 @@ export function AIAssistantContent({ userId }: AIAssistantContentProps) {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentMessage = inputMessage.trim();
     setInputMessage("");
     setIsLoading(true);
+
+    // Create assistant message with streaming content
+    const assistantMessageId = (Date.now() + 1).toString();
+    const assistantMessage: VoiceAssistantMessage = {
+      id: assistantMessageId,
+      role: "assistant",
+      content: "",
+      timestamp: new Date(),
+      language: selectedLanguage,
+    };
+
+    setMessages((prev) => [...prev, assistantMessage]);
+    setStreamingMessageId(assistantMessageId);
 
     try {
       const response = await fetch("/api/ai/chat", {
@@ -90,38 +115,95 @@ export function AIAssistantContent({ userId }: AIAssistantContentProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: inputMessage.trim(),
+          message: currentMessage,
           language: selectedLanguage,
           userId,
         }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const assistantMessage: VoiceAssistantMessage = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: data.response,
-          timestamp: new Date(),
-          language: selectedLanguage,
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
-      } else {
+      if (!response.ok) {
         throw new Error("Failed to get response");
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error("No reader available");
+      }
+
+      let accumulatedContent = "";
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || ""; // Keep incomplete line in buffer
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            try {
+              const data = JSON.parse(line.slice(6));
+
+              if (data.done) {
+                // Stream completed
+                setStreamingMessageId(null);
+                return;
+              }
+
+              if (data.error) {
+                throw new Error(data.error);
+              }
+
+              if (data.text) {
+                accumulatedContent += data.text;
+
+                // Update the assistant message with accumulated content
+                setMessages((prev) =>
+                  prev.map((msg) =>
+                    msg.id === assistantMessageId
+                      ? { ...msg, content: accumulatedContent }
+                      : msg
+                  )
+                );
+              }
+            } catch (parseError) {
+              console.error("Error parsing streaming data:", parseError);
+              // Continue with next line instead of breaking
+            }
+          }
+        }
+      }
+
+      // Ensure we have some content, if not show error
+      if (!accumulatedContent.trim()) {
+        throw new Error("No content received");
       }
     } catch (error) {
       console.error("Error sending message:", error);
       const errorMessage: VoiceAssistantMessage = {
-        id: (Date.now() + 1).toString(),
+        id: (Date.now() + 2).toString(),
         role: "assistant",
         content:
           "I'm sorry, I'm having trouble responding right now. Please try again.",
         timestamp: new Date(),
         language: selectedLanguage,
       };
-      setMessages((prev) => [...prev, errorMessage]);
+
+      // Remove the empty assistant message and add error message
+      setMessages((prev) =>
+        prev.filter((msg) => msg.id !== assistantMessageId).concat(errorMessage)
+      );
+      setStreamingMessageId(null);
     } finally {
       setIsLoading(false);
+      setStreamingMessageId(null);
       inputRef.current?.focus();
     }
   };
@@ -238,12 +320,44 @@ export function AIAssistantContent({ userId }: AIAssistantContentProps) {
     );
   };
 
-  const quickQuestions = [
-    "When is my next appointment?",
-    "What medications should I take today?",
-    "How is my recovery progress?",
-    "What are the side effects of my medications?",
-  ];
+  const getQuickQuestions = () => {
+    switch (selectedLanguage) {
+      case "HINDI":
+        return [
+          "मेरी अगली अपॉइंटमेंट कब है?",
+          "आज मुझे कौन सी दवाएं लेनी चाहिए?",
+          "मेरी रिकवरी कैसी चल रही है?",
+          "मेरी दवाओं के साइड इफेक्ट्स क्या हैं?",
+        ];
+      case "GUJARATI":
+        return [
+          "મારી આગલી એપોઇન્ટમેન્ટ ક્યારે છે?",
+          "આજે મારે કઈ દવાઓ લેવી જોઈએ?",
+          "મારી રીકવરી કેવી ચાલી રહી છે?",
+          "મારી દવાઓની સાઇડ ઇફેક્ટ્સ શું છે?",
+        ];
+      default:
+        return [
+          "When is my next appointment?",
+          "What medications should I take today?",
+          "How is my recovery progress?",
+          "What are the side effects of my medications?",
+        ];
+    }
+  };
+
+  const getQuickQuestionsLabel = () => {
+    switch (selectedLanguage) {
+      case "HINDI":
+        return "त्वरित प्रश्न:";
+      case "GUJARATI":
+        return "ઝડપી પ્રશ્નો:";
+      default:
+        return "Quick questions:";
+    }
+  };
+
+  const quickQuestions = getQuickQuestions();
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -324,6 +438,24 @@ export function AIAssistantContent({ userId }: AIAssistantContentProps) {
                       >
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">
                           {message.content}
+                          {message.role === "assistant" &&
+                            message.id === streamingMessageId &&
+                            message.content && (
+                              <span className="inline-block w-0.5 h-4 bg-current ml-1 animate-pulse" />
+                            )}
+                          {message.role === "assistant" &&
+                            !message.content &&
+                            isLoading && (
+                              <span className="inline-flex items-center gap-1 text-muted-foreground">
+                                <span className="animate-pulse">●</span>
+                                <span className="animate-pulse delay-75">
+                                  ●
+                                </span>
+                                <span className="animate-pulse delay-150">
+                                  ●
+                                </span>
+                              </span>
+                            )}
                         </p>
                       </div>
 
@@ -375,7 +507,7 @@ export function AIAssistantContent({ userId }: AIAssistantContentProps) {
                       <div className="flex items-center gap-1">
                         <Loader2 className="h-4 w-4 animate-spin" />
                         <span className="text-sm text-muted-foreground">
-                          Thinking...
+                          Connecting...
                         </span>
                       </div>
                     </div>
@@ -391,7 +523,7 @@ export function AIAssistantContent({ userId }: AIAssistantContentProps) {
           {messages.length <= 1 && (
             <div className="px-4 pb-4 border-t flex-shrink-0">
               <p className="text-sm font-medium mb-3 text-muted-foreground">
-                Quick questions:
+                {getQuickQuestionsLabel()}
               </p>
               <div className="grid gap-2 sm:grid-cols-2">
                 {quickQuestions.map((question, index) => (

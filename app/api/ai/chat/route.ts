@@ -90,16 +90,49 @@ export async function POST(request: NextRequest) {
     Patient's question: ${message}
     `;
 
-    const result = await genAI.models.generateContent({
+    // Use streaming for real-time response
+    const streamResult = await genAI.models.generateContentStream({
       model: "gemini-2.0-flash",
       contents: context,
     });
 
-    const aiResponse =
-      result.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "I'm sorry, I couldn't generate a response.";
+    // Create a ReadableStream for Server-Sent Events
+    const stream = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
 
-    return NextResponse.json({ response: aiResponse });
+        try {
+          for await (const chunk of streamResult) {
+            const text = chunk.candidates?.[0]?.content?.parts?.[0]?.text || "";
+            if (text) {
+              const data = `data: ${JSON.stringify({ text })}\n\n`;
+              controller.enqueue(encoder.encode(data));
+            }
+          }
+
+          // Send end signal
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`)
+          );
+          controller.close();
+        } catch (error) {
+          console.error("Streaming error:", error);
+          const errorData = `data: ${JSON.stringify({
+            error: "Stream error occurred",
+          })}\n\n`;
+          controller.enqueue(encoder.encode(errorData));
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
+    });
   } catch (error) {
     console.error("AI Chat error:", error);
     return NextResponse.json(

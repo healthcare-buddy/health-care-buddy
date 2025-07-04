@@ -3,6 +3,7 @@ import { Lexend } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { ParticlesBG } from "@/components/ParticlesBg";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -34,7 +35,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen dark:bg-black ">{children}</div>
+          <ParticlesBG />
+          <div className="min-h-screen  relative z-50 ">{children}</div>
           <Toaster richColors closeButton />
         </ThemeProvider>
       </body>

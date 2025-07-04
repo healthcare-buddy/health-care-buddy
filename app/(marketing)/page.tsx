@@ -17,7 +17,6 @@ import {
   Clock,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import { Spotlight } from "@/components/ui/spotlight";
 
 const faqs = [
   {
@@ -93,10 +92,6 @@ export default function HomePage() {
   };
   return (
     <div className="space-y-20">
-      <Spotlight
-        className="-top-40 left-0 md:-top-20 md:left-60"
-        fill="violet"
-      />
       {/* Hero Section */}
       <section className="relative py-8 lg:py-16 min-h-[90vh] space-y-16 overflow-hidden">
         <motion.div
@@ -485,7 +480,7 @@ export default function HomePage() {
           ].map((feature, index) => (
             <motion.div
               key={index}
-              className="text-center space-y-4"
+              className="text-center space-y-4 bg-card p-6 rounded-2xl"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
