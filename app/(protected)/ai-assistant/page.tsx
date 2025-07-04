@@ -1,9 +1,18 @@
 import { Suspense } from "react";
-import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { AIAssistantContent } from "@/components/user/AiAssistantContent";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default async function AIAssistantPage() {
   const session = await auth.api.getSession({
@@ -11,22 +20,45 @@ export default async function AIAssistantPage() {
   });
 
   if (!session) {
-    redirect("/sign-in");
+    return null; // This will be handled by the layout
   }
 
   return (
-    <div className="h-full">
-      <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold">AI Assistant</h1>
-        <p className="text-muted-foreground">
-          Chat with your AI healthcare assistant in your preferred language
-        </p>
-      </div>
+    <>
+      <header className="flex h-16 shrink-0 items-center gap-2">
+        <div className="flex items-center gap-2 px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href="/">Healthcare Buddy</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>AI Assistant</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </header>
 
-      <Suspense fallback={<AIAssistantSkeleton />}>
-        <AIAssistantContent userId={session.user.id} />
-      </Suspense>
-    </div>
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="h-full">
+          <div className="mb-6">
+            <h1 className="text-2xl md:text-3xl font-bold">AI Assistant</h1>
+            <p className="text-muted-foreground">
+              Chat with our AI to get personalized health insights and
+              recommendations.
+            </p>
+          </div>
+
+          <Suspense fallback={<AIAssistantSkeleton />}>
+            <AIAssistantContent userId={session.user.id} />
+          </Suspense>
+        </div>
+      </div>
+    </>
   );
 }
 

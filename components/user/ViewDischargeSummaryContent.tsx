@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,6 +10,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import {
   FileText,
   ArrowLeft,
@@ -25,6 +36,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ViewDischargeSummarySkeleton } from "../LoadingSkeleton";
+import { generateDischargeSummaryPDF } from "@/lib/pdf-generator";
 
 interface DischargeSummary {
   id: string;
@@ -60,11 +72,7 @@ export function ViewDischargeSummaryContent({
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    fetchSummary();
-  }, [summaryId]);
-
-  const fetchSummary = async () => {
+  const fetchSummary = useCallback(async () => {
     try {
       const response = await fetch(`/api/discharge-summary/view/${summaryId}`);
       if (response.ok) {
@@ -81,12 +89,13 @@ export function ViewDischargeSummaryContent({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [summaryId, router]);
+
+  useEffect(() => {
+    fetchSummary();
+  }, [fetchSummary]);
 
   const deleteSummary = async () => {
-    if (!confirm("Are you sure you want to delete this discharge summary?"))
-      return;
-
     try {
       const response = await fetch(`/api/discharge-summary/${summaryId}`, {
         method: "DELETE",
@@ -154,26 +163,9 @@ export function ViewDischargeSummaryContent({
 
     setIsDownloadingPdf(true);
     try {
-      const response = await fetch(`/api/discharge-summary/${summaryId}/pdf`, {
-        method: "POST",
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.style.display = "none";
-        a.href = url;
-        a.download = `discharge-summary-${summary.fileName}-${
-          new Date().toISOString().split("T")[0]
-        }.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        toast.success("PDF downloaded successfully!");
-      } else {
-        toast.error("Failed to generate PDF");
-      }
+      // Use our jsPDF generator with real data from database
+      generateDischargeSummaryPDF(summary);
+      toast.success("PDF downloaded successfully!");
     } catch (error) {
       console.error("Error downloading PDF:", error);
       toast.error("Something went wrong");
@@ -233,10 +225,33 @@ export function ViewDischargeSummaryContent({
             )}
             Download PDF
           </Button>
-          <Button variant="destructive" size="sm" onClick={deleteSummary}>
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="sm">
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Discharge Summary</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete this discharge summary? This
+                  action cannot be undone. This will permanently delete &quot;
+                  {summary?.fileName}&quot; and all associated data.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={deleteSummary}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 

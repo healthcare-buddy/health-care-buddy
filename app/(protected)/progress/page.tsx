@@ -4,6 +4,16 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { ProgressContent } from "@/components/user/ProgressContent";
 import { ProgressSkeleton } from "@/components/LoadingSkeleton";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 
 export default async function ProgressPage() {
   const session = await auth.api.getSession({
@@ -15,17 +25,38 @@ export default async function ProgressPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl md:text-3xl font-bold">Progress Report</h1>
-        <p className="text-muted-foreground">
-          Track your recovery progress and treatment adherence
-        </p>
-      </div>
+    <>
+      <header className="flex h-16 shrink-0 items-center gap-2">
+        <div className="flex items-center gap-2 px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Progress Tracking</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </header>
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold">Progress Report</h1>
+            <p className="text-muted-foreground">
+              Track your recovery progress and treatment adherence
+            </p>
+          </div>
 
-      <Suspense fallback={<ProgressSkeleton />}>
-        <ProgressContent userId={session.user.id} />
-      </Suspense>
-    </div>
+          <Suspense fallback={<ProgressSkeleton />}>
+            <ProgressContent userId={session.user.id} />
+          </Suspense>
+        </div>
+      </div>
+    </>
   );
 }

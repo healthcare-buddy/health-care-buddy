@@ -326,7 +326,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -344,6 +344,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -359,7 +370,10 @@ import Link from "next/link";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileSkeleton } from "../LoadingSkeleton";
+import {
+  ProfileSkeleton,
+  DischargeSummariesListSkeleton,
+} from "../LoadingSkeleton";
 
 interface DischargeSummary {
   id: string;
@@ -387,6 +401,7 @@ export function ProfileContent({ userId }: ProfileContentProps) {
     DischargeSummary[]
   >([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSummariesLoading, setIsSummariesLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -399,12 +414,8 @@ export function ProfileContent({ userId }: ProfileContentProps) {
     },
   });
 
-  useEffect(() => {
-    fetchPatientData();
-    fetchDischargeSummaries();
-  }, [userId]);
-
-  const fetchDischargeSummaries = async () => {
+  const fetchDischargeSummaries = useCallback(async () => {
+    setIsSummariesLoading(true);
     try {
       const response = await fetch(`/api/discharge-summary/${userId}`);
       if (response.ok) {
@@ -415,29 +426,11 @@ export function ProfileContent({ userId }: ProfileContentProps) {
       console.error("Error fetching discharge summaries:", error);
       toast.error("Failed to load discharge summaries");
     } finally {
-      setIsLoading(false);
+      setIsSummariesLoading(false);
     }
-  };
+  }, [userId]);
 
-  const deleteSummary = async (summaryId: string) => {
-    try {
-      const response = await fetch(`/api/discharge-summary/${summaryId}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        toast.success("Summary deleted successfully");
-        fetchDischargeSummaries();
-      } else {
-        toast.error("Failed to delete summary");
-      }
-    } catch (error) {
-      console.error("Error deleting summary:", error);
-      toast.error("Something went wrong");
-    }
-  };
-
-  const fetchPatientData = async () => {
+  const fetchPatientData = useCallback(async () => {
     try {
       const response = await fetch(`/api/patient/${userId}`);
       if (response.ok) {
@@ -455,6 +448,29 @@ export function ProfileContent({ userId }: ProfileContentProps) {
       console.error("Error fetching patient data:", error);
     } finally {
       setIsLoading(false);
+    }
+  }, [userId, form]);
+
+  useEffect(() => {
+    fetchPatientData();
+    fetchDischargeSummaries();
+  }, [fetchPatientData, fetchDischargeSummaries]);
+
+  const deleteSummary = async (summaryId: string) => {
+    try {
+      const response = await fetch(`/api/discharge-summary/${summaryId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        toast.success("Summary deleted successfully");
+        fetchDischargeSummaries();
+      } else {
+        toast.error("Failed to delete summary");
+      }
+    } catch (error) {
+      console.error("Error deleting summary:", error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -631,7 +647,9 @@ export function ProfileContent({ userId }: ProfileContentProps) {
           </div>
         </CardHeader>
         <CardContent>
-          {dischargeSummaries.length > 0 ? (
+          {isSummariesLoading ? (
+            <DischargeSummariesListSkeleton />
+          ) : dischargeSummaries.length > 0 ? (
             <div className="space-y-4">
               {dischargeSummaries.map((summary) => (
                 <div
@@ -660,14 +678,36 @@ export function ProfileContent({ userId }: ProfileContentProps) {
                           View
                         </Link>
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => deleteSummary(summary.id)}
-                      >
-                        <Trash2 className="mr-1 h-3 w-3" />
-                        Delete
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="outline" size="sm">
+                            <Trash2 className="mr-1 h-3 w-3" />
+                            Delete
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Delete Discharge Summary
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete &quot;
+                              {summary.fileName}&quot;? This action cannot be
+                              undone. This will permanently delete the discharge
+                              summary and all associated data.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteSummary(summary.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </div>
                 </div>

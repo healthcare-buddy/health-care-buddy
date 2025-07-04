@@ -3,7 +3,6 @@ import { Lexend } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
-import { Navbar } from "@/components/Navbar";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -35,10 +34,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen bg-background">
-            <Navbar />
-            <main className="container mx-auto px-4 py-8">{children}</main>
-          </div>
+          <div className="min-h-screen bg-background">{children}</div>
           <Toaster richColors closeButton />
         </ThemeProvider>
       </body>

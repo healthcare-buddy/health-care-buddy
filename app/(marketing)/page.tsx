@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -13,9 +15,6 @@ import {
   Stethoscope,
   FileText,
   Clock,
-  Heart,
-  Activity,
-  Shield,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
@@ -94,309 +93,719 @@ export default function HomePage() {
   return (
     <div className="space-y-20">
       {/* Hero Section */}
-      <section className="py-8 lg:py-16 min-h-[80vh] lg:min-h-[70vh] space-y-12">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
-          {/* Hero Image */}
-          <div className="flex-1 flex justify-center lg:justify-start order-2 lg:order-1">
-            <div className="bg-gradient-to-br from-teal-100 to-teal-200 dark:from-teal-900/30 dark:to-teal-800/30 w-72 h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-3xl flex items-center justify-center p-6 shadow-lg">
-              <div className="relative">
-                {/* Main Heart Icon */}
-                <Heart className="h-28 w-28 lg:h-32 lg:w-32 xl:h-36 xl:w-36 text-pink-500 fill-pink-500 drop-shadow-sm" />
+      <section className="relative py-8 lg:py-16 min-h-[90vh] space-y-16 overflow-hidden">
+        {/* Animated Blurred Gradient Background */}
+        <div className="absolute inset-0 -z-10">
+          <motion.div
+            className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-30"
+            animate={{
+              x: [0, 100, 0],
+              y: [0, -100, 0],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+          />
+          <motion.div
+            className="absolute top-40 right-20 w-80 h-80 bg-gradient-to-r from-teal-400 to-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-30"
+            animate={{
+              x: [0, -120, 0],
+              y: [0, 100, 0],
+              scale: [1, 0.8, 1],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-20 left-40 w-60 h-60 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full mix-blend-multiply filter blur-xl opacity-30"
+            animate={{
+              x: [0, 80, 0],
+              y: [0, -80, 0],
+              scale: [1, 1.3, 1],
+            }}
+            transition={{
+              duration: 18,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+          />
+        </div>
 
-                {/* Medical Cross */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="w-6 h-1.5 lg:w-8 lg:h-2 bg-white rounded-full shadow-sm"></div>
-                  <div className="w-1.5 h-6 lg:w-2 lg:h-8 bg-white rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-sm"></div>
-                </div>
+        <motion.div
+          className="text-center space-y-8 max-w-4xl mx-auto relative z-10"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          {/* Hero Badge */}
+          <motion.div
+            className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-200/50 dark:border-blue-500/30 rounded-full text-sm font-medium text-blue-700 dark:text-blue-300 backdrop-blur-sm"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <motion.span
+              className="w-2 h-2 bg-green-500 rounded-full mr-2"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
+            />
+            Introducing Support For AI Models
+          </motion.div>
 
-                {/* Pulse/Activity Line */}
-                <Activity className="absolute -top-3 -right-3 lg:-top-4 lg:-right-4 h-6 w-6 lg:h-8 lg:w-8 text-teal-600 drop-shadow-sm" />
+          {/* Main Heading */}
+          <motion.div
+            className="space-y-6"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <motion.h1
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-white leading-tight"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              Modern Solutions for{" "}
+              <motion.span
+                className="block text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+              >
+                Patient Engagement
+              </motion.span>
+            </motion.h1>
 
-                {/* Stethoscope Icon */}
-                <Stethoscope className="absolute -bottom-1 -left-3 lg:-bottom-2 lg:-left-4 h-8 w-8 lg:h-10 lg:w-10 text-blue-600 drop-shadow-sm" />
+            <motion.p
+              className="text-lg lg:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
+            >
+              Highly customizable components for building modern healthcare
+              applications that look and feel the way you mean it.
+            </motion.p>
+          </motion.div>
 
-                {/* Shield for Security */}
-                <Shield className="absolute top-1 -right-1 lg:top-2 lg:-right-2 h-5 w-5 lg:h-6 lg:w-6 text-green-600 fill-green-100 drop-shadow-sm" />
-
-                {/* Enhanced decorative elements */}
-                <div className="absolute top-6 left-1 lg:top-8 lg:left-2 w-2.5 h-2.5 lg:w-3 lg:h-3 bg-teal-400 rounded-full opacity-80 animate-pulse"></div>
-                <div
-                  className="absolute bottom-6 right-1 lg:bottom-8 lg:right-2 w-3 h-3 lg:w-4 lg:h-4 bg-blue-400 rounded-full opacity-60 animate-pulse"
-                  style={{ animationDelay: "1s" }}
-                ></div>
-                <div
-                  className="absolute bottom-3 left-6 lg:bottom-4 lg:left-8 w-1.5 h-1.5 lg:w-2 lg:h-2 bg-pink-400 rounded-full animate-pulse"
-                  style={{ animationDelay: "2s" }}
-                ></div>
-
-                {/* Additional floating elements */}
-                <div
-                  className="absolute -top-1 left-4 w-2 h-2 bg-yellow-400 rounded-full opacity-70 animate-bounce"
-                  style={{ animationDelay: "0.5s" }}
-                ></div>
-                <div
-                  className="absolute -bottom-1 right-6 w-2.5 h-2.5 bg-purple-400 rounded-full opacity-60 animate-bounce"
-                  style={{ animationDelay: "1.5s" }}
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Hero Content */}
-          <div className="flex-1 space-y-6 lg:space-y-8 text-center lg:text-left order-1 lg:order-2 max-w-2xl lg:max-w-none">
-            <div className="space-y-4 lg:space-y-6">
-              <div className="inline-flex items-center px-4 py-2 bg-blue-50 dark:bg-blue-900/30 rounded-full text-sm font-medium text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                ✨ Healthcare Buddy
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
-                Your Smart Recovery Partner
-                <span className="block text-transparent bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text mt-2">
-                  AI-Powered Discharge & Follow-Up Care Planner
-                </span>
-              </h1>
-            </div>
-
-            <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Healthcare Buddy is a Next.js application that helps patients
-              manage their post-discharge recovery with AI-powered personalized
-              follow-up plans, medication tracking, and AI-powered healthcare
-              assistance with Gemini API.
-            </p>
-
-            {isAutheticated ? (
+          {/* CTA Buttons */}
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+          >
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 size="lg"
                 asChild
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 px-8 py-4 text-lg font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
               >
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href={isAutheticated ? "/dashboard" : "/sign-up"}>
+                  {isAutheticated ? "Go to Dashboard" : "Start Building"}
+                </Link>
               </Button>
-            ) : (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-                <Button
-                  size="lg"
-                  asChild
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-                >
-                  <Link href="/sign-up">Get Started</Link>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  asChild
-                  className="border-2 border-gray-300 dark:border-gray-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 transform hover:scale-105"
-                >
-                  <Link href="/sign-in">Sign In</Link>
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                size="lg"
+                variant="outline"
+                asChild
+                className="px-8 py-4 text-lg font-medium rounded-lg transition-all duration-200"
+              >
+                <Link href="/ai-assistant">Ai Assistant</Link>
+              </Button>
+            </motion.div>
+          </motion.div>
+        </motion.div>
 
-        {/* Enhanced Feature highlights - Now below hero content */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 max-w-4xl mx-auto">
-          <div className="flex items-center justify-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+        {/* Dashboard Preview */}
+        <motion.div
+          className="relative max-w-6xl mx-auto"
+          initial={{ opacity: 0, y: 80 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.0, delay: 1.4 }}
+        >
+          {/* Background decorative elements */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-purple-600/5 to-teal-600/5 rounded-3xl blur-3xl"></div>
+
+          <motion.div
+            className="absolute -top-4 -left-4 w-8 h-8 bg-blue-500/20 rounded-full"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+          />
+          <motion.div
+            className="absolute -top-2 -right-6 w-6 h-6 bg-purple-500/20 rounded-full"
+            animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.7, 0.3] }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              repeatType: "reverse",
+              delay: 1,
+            }}
+          />
+          <motion.div
+            className="absolute -bottom-4 -left-2 w-5 h-5 bg-teal-500/20 rounded-full"
+            animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              repeatType: "reverse",
+              delay: 2,
+            }}
+          />
+
+          {/* Dashboard Image Container */}
+          <motion.div
+            className="relative bg-gray-900 dark:bg-gray-800 rounded-2xl lg:rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden backdrop-blur-sm"
+            whileHover={{ scale: 1.02, y: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Browser Header */}
+            <motion.div
+              className="flex items-center justify-between px-4 py-3 bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.6 }}
+            >
+              <div className="flex items-center space-x-2">
+                <motion.div
+                  className="w-3 h-3 bg-red-500 rounded-full"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                <motion.div
+                  className="w-3 h-3 bg-yellow-500 rounded-full"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
+                />
+                <motion.div
+                  className="w-3 h-3 bg-green-500 rounded-full"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
+                />
+              </div>
+              <motion.div
+                className="flex-1 max-w-md mx-4"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 1.8 }}
+              >
+                <div className="bg-white dark:bg-gray-600 rounded-md px-3 py-1 text-sm text-gray-600 dark:text-gray-300 text-center">
+                  healthcare-buddy.vercel.app
+                </div>
+              </motion.div>
+              <div className="w-16"></div>
+            </motion.div>
+
+            {/* Dashboard Content */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 2.0 }}
+            >
+              <motion.div
+                className="relative z-10"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Image
+                  src="/dashboard.png"
+                  alt="Healthcare Buddy Dashboard"
+                  width={1200}
+                  height={800}
+                  className="w-full h-auto object-cover"
+                  priority
+                />
+              </motion.div>
+
+              {/* Animated overlay gradient */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-t from-gray-900/20 via-transparent to-transparent"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1.0, delay: 2.2 }}
+              />
+
+              {/* Subtle animated glow effect */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-teal-500/10 rounded-lg"
+                animate={{
+                  opacity: [0, 0.3, 0],
+                  scale: [0.98, 1.02, 0.98],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        {/* Enhanced Feature highlights */}
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 2.4 }}
+        >
+          <motion.div
+            className="flex items-center justify-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 backdrop-blur-sm"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 2.6 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+          >
+            <motion.div
+              className="w-2 h-2 bg-green-500 rounded-full"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
+            />
             <span className="text-sm font-medium text-green-700 dark:text-green-300">
               AI-Powered Analysis
             </span>
-          </div>
-          <div className="flex items-center justify-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <div
-              className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"
-              style={{ animationDelay: "0.5s" }}
-            ></div>
+          </motion.div>
+
+          <motion.div
+            className="flex items-center justify-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800 backdrop-blur-sm"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 2.8 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+          >
+            <motion.div
+              className="w-2 h-2 bg-blue-500 rounded-full"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+                delay: 0.5,
+              }}
+            />
             <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
               Personalized Care Plans
             </span>
-          </div>
-          <div className="flex items-center justify-center gap-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
-            <div
-              className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"
-              style={{ animationDelay: "1s" }}
-            ></div>
+          </motion.div>
+
+          <motion.div
+            className="flex items-center justify-center gap-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800 backdrop-blur-sm"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 3.0 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+          >
+            <motion.div
+              className="w-2 h-2 bg-purple-500 rounded-full"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+                delay: 1,
+              }}
+            />
             <span className="text-sm font-medium text-purple-700 dark:text-purple-300">
               24/7 Support
             </span>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Key Features Section */}
-      <section className="space-y-12">
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+      <motion.section
+        className="space-y-12"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.div
+          className="text-center space-y-4"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.h2
+            className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
             Key Features
-          </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          </motion.h2>
+          <motion.p
+            className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             Healthcare Buddy offers a comprehensive suite of tools to support
             your recovery journey.
-          </p>
-          <Button variant="outline" className="mt-6" asChild>
-            <Link href={"/dashboard"}>Explore All Features</Link>
-          </Button>
-        </div>
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <Button variant="outline" className="mt-6" asChild>
+              <Link href={"/dashboard"}>Explore All Features</Link>
+            </Button>
+          </motion.div>
+        </motion.div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center">
-              <Brain className="h-8 w-8 text-blue-600" />
-            </div>
-            <h3 className="text-xl font-semibold">AI Analysis</h3>
-            <p className="text-gray-600 dark:text-gray-300 text-sm">
-              Our AI analyzes your discharge summary to provide personalized
-              recommendations.
-            </p>
-          </div>
-
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center">
-              <Calendar className="h-8 w-8 text-green-600" />
-            </div>
-            <h3 className="text-xl font-semibold">Follow-up Planning</h3>
-            <p className="text-gray-600 dark:text-gray-300 text-sm">
-              Generate & organize follow-up plans with reminders and guidance
-              for a smooth recovery.
-            </p>
-          </div>
-
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center">
-              <Pill className="h-8 w-8 text-purple-600" />
-            </div>
-            <h3 className="text-xl font-semibold">Medication Tracking</h3>
-            <p className="text-gray-600 dark:text-gray-300 text-sm">
-              Keep track your medications, dosages, and schedules to ensure
-              adherence.
-            </p>
-          </div>
-
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center">
-              <BarChart3 className="h-8 w-8 text-orange-600" />
-            </div>
-            <h3 className="text-xl font-semibold">Progress Monitoring</h3>
-            <p className="text-gray-600 dark:text-gray-300 text-sm">
-              Monitor your progress over time with detailed reports and
-              analytics.
-            </p>
-          </div>
+          {[
+            {
+              icon: Brain,
+              title: "AI Analysis",
+              description:
+                "Our AI analyzes your discharge summary to provide personalized recommendations.",
+              color: "blue",
+              delay: 0.1,
+            },
+            {
+              icon: Calendar,
+              title: "Follow-up Planning",
+              description:
+                "Generate & organize follow-up plans with reminders and guidance for a smooth recovery.",
+              color: "green",
+              delay: 0.2,
+            },
+            {
+              icon: Pill,
+              title: "Medication Tracking",
+              description:
+                "Keep track your medications, dosages, and schedules to ensure adherence.",
+              color: "purple",
+              delay: 0.3,
+            },
+            {
+              icon: BarChart3,
+              title: "Progress Monitoring",
+              description:
+                "Monitor your progress over time with detailed reports and analytics.",
+              color: "orange",
+              delay: 0.4,
+            },
+          ].map((feature, index) => (
+            <motion.div
+              key={index}
+              className="text-center space-y-4"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: feature.delay }}
+              whileHover={{ scale: 1.05, y: -10 }}
+            >
+              <motion.div
+                className={`w-16 h-16 mx-auto bg-${feature.color}-100 dark:bg-${feature.color}-900/30 rounded-2xl flex items-center justify-center`}
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.6 }}
+              >
+                <feature.icon className={`h-8 w-8 text-${feature.color}-600`} />
+              </motion.div>
+              <motion.h3
+                className="text-xl font-semibold"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: feature.delay + 0.1 }}
+              >
+                {feature.title}
+              </motion.h3>
+              <motion.p
+                className="text-gray-600 dark:text-gray-300 text-sm"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: feature.delay + 0.2 }}
+              >
+                {feature.description}
+              </motion.p>
+            </motion.div>
+          ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* The Science Behind Our AI */}
-      <section className="bg-gray-50 dark:bg-gray-900/50 rounded-2xl p-8 lg:p-12 space-y-6">
-        <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center">
+      <motion.section
+        className="bg-gray-50 dark:bg-gray-900/50 rounded-2xl p-8 lg:p-12 space-y-6"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.h2
+          className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           The Science Behind Our AI
-        </h2>
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-4xl mx-auto text-center">
+        </motion.h2>
+        <motion.p
+          className="text-lg text-gray-600 dark:text-gray-300 max-w-4xl mx-auto text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           Our AI algorithms are based on cutting-edge research in medical
           informatics and machine learning. We utilize natural language
           processing (NLP) to analyze discharge summaries and predict individual
           patient outcomes. Our models are trained on a large dataset of patient
           outcomes to ensure accuracy and effectiveness.{" "}
-        </p>
-      </section>
+        </motion.p>
+      </motion.section>
 
       {/* Integration Section */}
-      <section className="space-y-8">
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+      <motion.section
+        className="space-y-8"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.div
+          className="text-center space-y-4"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.h2
+            className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
             Integration with Healthcare Systems
-          </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          </motion.h2>
+          <motion.p
+            className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
             Healthcare Buddy seamlessly integrates with existing healthcare
             systems and Electronic Medical Records (EMRs) to streamline data
             exchange and improve care coordination. Our platform supports secure
             data transfer and adheres to industry standards for patient privacy
             and data security.
-          </p>
-        </div>
-      </section>
+          </motion.p>
+        </motion.div>
+      </motion.section>
 
       {/* FAQ Section */}
-      <section className="space-y-8">
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+      <motion.section
+        className="space-y-8"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.div
+          className="text-center space-y-4"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.h2
+            className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
             Frequently Asked Questions
-          </h2>
-        </div>
+          </motion.h2>
+        </motion.div>
 
-        <div className="space-y-4 max-w-3xl mx-auto">
+        <motion.div
+          className="space-y-4 max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
           {faqs.map((faq, index) => (
-            <AccordionItem
+            <motion.div
               key={index}
-              faq={faq}
-              isOpen={openFAQ === index}
-              onToggle={() => toggleFAQ(index)}
-            />
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 * index }}
+            >
+              <AccordionItem
+                faq={faq}
+                isOpen={openFAQ === index}
+                onToggle={() => toggleFAQ(index)}
+              />
+            </motion.div>
           ))}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* Trusted by Healthcare Professionals */}
-      <section className="space-y-8">
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+      <motion.section
+        className="space-y-8"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.div
+          className="text-center space-y-4"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.h2
+            className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
             Trusted by Healthcare Professionals
-          </h2>
-        </div>
+          </motion.h2>
+        </motion.div>
 
         <div className="grid gap-8 md:grid-cols-3">
-          <Card className="bg-gray-50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 mx-auto bg-teal-100 dark:bg-teal-900/30 rounded-2xl flex items-center justify-center mb-4">
-                <Stethoscope className="h-8 w-8 text-teal-600" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">
-                Medical Professionals
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">
-                Trusted by doctors and nurses worldwide
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-4">
-                <FileText className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">Clinical Evidence</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">
-                Backed by peer-reviewed research
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 mx-auto bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center mb-4">
-                <Clock className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">24/7 Support</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">
-                Round-the-clock healthcare assistance
-              </p>
-            </CardContent>
-          </Card>
+          {[
+            {
+              icon: Stethoscope,
+              title: "Medical Professionals",
+              description: "Trusted by doctors and nurses worldwide",
+              color: "teal",
+              delay: 0.1,
+            },
+            {
+              icon: FileText,
+              title: "Clinical Evidence",
+              description: "Backed by peer-reviewed research",
+              color: "blue",
+              delay: 0.2,
+            },
+            {
+              icon: Clock,
+              title: "24/7 Support",
+              description: "Round-the-clock healthcare assistance",
+              color: "green",
+              delay: 0.3,
+            },
+          ].map((card, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: card.delay }}
+              whileHover={{ scale: 1.05, y: -10 }}
+            >
+              <Card className="bg-gray-50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700 h-full">
+                <CardContent className="p-8 text-center">
+                  <motion.div
+                    className={`w-16 h-16 mx-auto bg-${card.color}-100 dark:bg-${card.color}-900/30 rounded-2xl flex items-center justify-center mb-4`}
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <card.icon className={`h-8 w-8 text-${card.color}-600`} />
+                  </motion.div>
+                  <motion.h3
+                    className="font-semibold text-lg mb-2"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: card.delay + 0.1 }}
+                  >
+                    {card.title}
+                  </motion.h3>
+                  <motion.p
+                    className="text-gray-600 dark:text-gray-300 text-sm"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: card.delay + 0.2 }}
+                  >
+                    {card.description}
+                  </motion.p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* Final CTA */}
-      <section className="text-center space-y-6 py-16 bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-900/20 dark:to-teal-900/20 rounded-2xl">
-        <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+      <motion.section
+        className="text-center space-y-6 py-16 bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-900/20 dark:to-teal-900/20 rounded-2xl"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.h2
+          className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           Ready to Take Control of Your Recovery?
-        </h2>
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        </motion.h2>
+        <motion.p
+          className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           Join thousands of patients and healthcare providers using Healthcare
           Buddy for better outcomes.
-        </p>
-        <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-          <Link href="/sign-up">Get Started</Link>
-        </Button>
-      </section>
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          whileHover={{ scale: 1.05 }}
+        >
+          <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Link href="/sign-up">Get Started</Link>
+          </Button>
+        </motion.div>
+      </motion.section>
     </div>
   );
 }

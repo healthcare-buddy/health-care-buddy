@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,6 +18,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   Upload,
   FileText,
   X,
@@ -25,10 +36,12 @@ import {
   CheckCircle,
   Eye,
   Trash2,
+  Download,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { generateDischargeSummaryPDF } from "@/lib/pdf-generator";
 
 interface DischargeSummaryContentProps {
   userId: string;
@@ -53,6 +66,12 @@ interface DischargeSummary {
   createdAt: string;
 }
 
+interface PatientInfo {
+  name: string;
+  age: number;
+  gender: string;
+}
+
 export function DischargeSummaryContent({
   userId,
 }: DischargeSummaryContentProps) {
@@ -67,13 +86,28 @@ export function DischargeSummaryContent({
     DischargeSummary[]
   >([]);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [patientInfo, setPatientInfo] = useState<PatientInfo | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    fetchExistingSummaries();
+  const fetchPatientInfo = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/patient/${userId}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data) {
+          setPatientInfo({
+            name: data.user.name,
+            age: data.age,
+            gender: data.gender,
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching patient info:", error);
+    }
   }, [userId]);
 
-  const fetchExistingSummaries = async () => {
+  const fetchExistingSummaries = useCallback(async () => {
     try {
       const response = await fetch(`/api/discharge-summary/${userId}`);
       if (response.ok) {
@@ -83,7 +117,12 @@ export function DischargeSummaryContent({
     } catch (error) {
       console.error("Error fetching summaries:", error);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    fetchExistingSummaries();
+    fetchPatientInfo();
+  }, [fetchExistingSummaries, fetchPatientInfo]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -228,6 +267,39 @@ export function DischargeSummaryContent({
     } catch (error) {
       console.error("Error deleting summary:", error);
       toast.error("Something went wrong");
+    }
+  };
+
+  const downloadReport = () => {
+    if (!extractedData) return;
+
+    // Create a temporary summary data structure for PDF generation using extracted data
+    const tempSummaryData = {
+      id: "temp-analysis",
+      fileName: selectedFile?.name || "discharge-analysis.pdf",
+      diagnosis: extractedData.diagnosis,
+      medications: extractedData.medications,
+      treatmentSummary: extractedData.treatmentSummary,
+      recoveryInstructions: extractedData.recoveryInstructions,
+      followUpRequired: extractedData.followUpRequired || "Not specified",
+      restrictions: extractedData.restrictions || "Not specified",
+      createdAt: new Date().toISOString(),
+      parsedAt: new Date().toISOString(),
+      patient: {
+        age: patientInfo?.age || 0,
+        gender: patientInfo?.gender || "Not specified",
+        user: {
+          name: patientInfo?.name || "Patient",
+        },
+      },
+    };
+
+    try {
+      generateDischargeSummaryPDF(tempSummaryData);
+      toast.success("Report downloaded successfully!");
+    } catch (error) {
+      console.error("Error downloading report:", error);
+      toast.error("Failed to download report");
     }
   };
 
@@ -446,10 +518,18 @@ export function DischargeSummaryContent({
 
             <Separator />
 
-            <div className="flex gap-4">
+            <div className="flex gap-3">
+              <Button
+                onClick={downloadReport}
+                variant="outline"
+                className="flex-1"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download Report
+              </Button>
               <Button onClick={saveExtractedData} className="flex-1">
                 <CheckCircle className="mr-2 h-4 w-4" />
-                Save Discharge Summary
+                Save Summary
               </Button>
               <Button
                 variant="outline"
@@ -504,20 +584,52 @@ export function DischargeSummaryContent({
                         View
                       </Link>
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => deleteSummary(summary.id)}
-                    >
-                      <Trash2 className="mr-1 h-3 w-3" />
-                      Delete
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="outline" size="sm">
+                          <Trash2 className="mr-1 h-3 w-3" />
+                          Delete
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Delete Discharge Summary
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete &quot;
+                            {summary.fileName}&quot;? This action cannot be
+                            undone. This will permanently delete the discharge
+                            summary and all associated data.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => deleteSummary(summary.id)}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {/* Download Report Button */}
+      {extractedData && (
+        <div className="flex justify-end">
+          <Button onClick={downloadReport} className="w-full max-w-xs">
+            <FileText className="mr-2 h-4 w-4" />
+            Download Discharge Summary Report
+          </Button>
+        </div>
       )}
     </div>
   );
