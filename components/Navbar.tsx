@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,13 @@ import { usePathname } from "next/navigation";
 
 export function Navbar() {
   const pathname = usePathname();
+  const [isAutheticated, setisAutheticated] = useState(false);
+
+  useEffect(() => {
+    authClient.getSession().then((session) => {
+      setisAutheticated(!!session.data?.session);
+    });
+  });
 
   const { data: session } = authClient.useSession();
   const { theme, setTheme } = useTheme();
@@ -60,7 +67,7 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6">
-            {session && (
+            {isAutheticated && (
               <>
                 {navItems.map((item) => (
                   <Link
@@ -90,7 +97,7 @@ export function Navbar() {
               <span className="sr-only">Toggle theme</span>
             </Button>
 
-            {session ? (
+            {isAutheticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -99,12 +106,12 @@ export function Navbar() {
                   >
                     <Avatar className="h-8 w-8">
                       <AvatarImage
-                        src={session.user.image || ""}
-                        alt={session.user.name || ""}
+                        src={session?.user.image || ""}
+                        alt={session?.user.name || ""}
                       />
                       <AvatarFallback>
-                        {session.user.name?.charAt(0) ||
-                          session.user.email?.charAt(0)}
+                        {session?.user.name?.charAt(0) ||
+                          session?.user.email?.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -112,12 +119,12 @@ export function Navbar() {
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <div className="flex items-center justify-start gap-2 p-2">
                     <div className="flex flex-col space-y-1 leading-none">
-                      {session.user.name && (
-                        <p className="font-medium">{session.user.name}</p>
+                      {session?.user.name && (
+                        <p className="font-medium">{session?.user.name}</p>
                       )}
-                      {session.user.email && (
+                      {session?.user.email && (
                         <p className="w-[200px] truncate text-sm text-muted-foreground">
-                          {session.user.email}
+                          {session?.user.email}
                         </p>
                       )}
                     </div>
@@ -160,26 +167,26 @@ export function Navbar() {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <div className="flex flex-col space-y-4 mt-4">
-                  {session ? (
+                  {isAutheticated ? (
                     <>
                       <SheetTitle className="px-3 mt-2">
                         <div className="flex items-center space-x-2 pb-4 border-b">
                           <Avatar className="h-8 w-8">
                             <AvatarImage
-                              src={session.user.image || ""}
-                              alt={session.user.name || ""}
+                              src={session?.user.image || ""}
+                              alt={session?.user.name || ""}
                             />
                             <AvatarFallback>
-                              {session.user.name?.charAt(0) ||
-                                session.user.email?.charAt(0)}
+                              {session?.user.name?.charAt(0) ||
+                                session?.user.email?.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
                           <div>
                             <p className="font-medium text-sm">
-                              {session.user.name}
+                              {session?.user.name}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              {session.user.email}
+                              {session?.user.email}
                             </p>
                           </div>
                         </div>
