@@ -17,6 +17,7 @@ import {
   Clock,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { Spotlight } from "@/components/ui/spotlight";
 
 const faqs = [
   {
@@ -92,51 +93,12 @@ export default function HomePage() {
   };
   return (
     <div className="space-y-20">
+      <Spotlight
+        className="-top-40 left-0 md:-top-20 md:left-60"
+        fill="violet"
+      />
       {/* Hero Section */}
       <section className="relative py-8 lg:py-16 min-h-[90vh] space-y-16 overflow-hidden">
-        {/* Animated Blurred Gradient Background */}
-        <div className="absolute inset-0 -z-10">
-          <motion.div
-            className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-30"
-            animate={{
-              x: [0, 100, 0],
-              y: [0, -100, 0],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
-          <motion.div
-            className="absolute top-40 right-20 w-80 h-80 bg-gradient-to-r from-teal-400 to-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-30"
-            animate={{
-              x: [0, -120, 0],
-              y: [0, 100, 0],
-              scale: [1, 0.8, 1],
-            }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
-          <motion.div
-            className="absolute bottom-20 left-40 w-60 h-60 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full mix-blend-multiply filter blur-xl opacity-30"
-            animate={{
-              x: [0, 80, 0],
-              y: [0, -80, 0],
-              scale: [1, 1.3, 1],
-            }}
-            transition={{
-              duration: 18,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
-        </div>
-
         <motion.div
           className="text-center space-y-8 max-w-4xl mx-auto relative z-10"
           initial={{ opacity: 0, y: 50 }}
@@ -145,13 +107,13 @@ export default function HomePage() {
         >
           {/* Hero Badge */}
           <motion.div
-            className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-200/50 dark:border-blue-500/30 rounded-full text-sm font-medium text-blue-700 dark:text-blue-300 backdrop-blur-sm"
+            className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-200/30 dark:border-blue-400/40 rounded-full text-sm font-medium  backdrop-blur-sm"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <motion.span
-              className="w-2 h-2 bg-green-500 rounded-full mr-2"
+              className="w-2 h-2 bg-green-400 rounded-full mr-2"
               animate={{ scale: [1, 1.2, 1] }}
               transition={{
                 duration: 2,
@@ -170,14 +132,14 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <motion.h1
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-white leading-tight"
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold  leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               Modern Solutions for{" "}
               <motion.span
-                className="block text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text"
+                className="block text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-teal-400 bg-clip-text"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
@@ -187,7 +149,7 @@ export default function HomePage() {
             </motion.h1>
 
             <motion.p
-              className="text-lg lg:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl mx-auto"
+              className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.0 }}
@@ -235,12 +197,13 @@ export default function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.0, delay: 1.4 }}
         >
-          {/* Background decorative elements */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-purple-600/5 to-teal-600/5 rounded-3xl blur-3xl"></div>
+          {/* Enhanced Background decorative elements */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/15 to-teal-600/20 dark:from-blue-400/25 dark:via-purple-400/20 dark:to-teal-400/25 rounded-3xl blur-3xl transform scale-110"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-pink-500/10 to-cyan-500/10 dark:from-indigo-400/15 dark:via-pink-400/15 dark:to-cyan-400/15 rounded-3xl blur-2xl"></div>
 
           <motion.div
-            className="absolute -top-4 -left-4 w-8 h-8 bg-blue-500/20 rounded-full"
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+            className="absolute -top-4 -left-4 w-8 h-8 bg-blue-500/30 dark:bg-blue-400/40 rounded-full"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.8, 0.4] }}
             transition={{
               duration: 3,
               repeat: Infinity,
@@ -248,8 +211,8 @@ export default function HomePage() {
             }}
           />
           <motion.div
-            className="absolute -top-2 -right-6 w-6 h-6 bg-purple-500/20 rounded-full"
-            animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.7, 0.3] }}
+            className="absolute -top-2 -right-6 w-6 h-6 bg-purple-500/30 dark:bg-purple-400/40 rounded-full"
+            animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.9, 0.4] }}
             transition={{
               duration: 4,
               repeat: Infinity,
@@ -258,8 +221,8 @@ export default function HomePage() {
             }}
           />
           <motion.div
-            className="absolute -bottom-4 -left-2 w-5 h-5 bg-teal-500/20 rounded-full"
-            animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+            className="absolute -bottom-4 -left-2 w-5 h-5 bg-teal-500/30 dark:bg-teal-400/40 rounded-full"
+            animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.7, 0.4] }}
             transition={{
               duration: 5,
               repeat: Infinity,
@@ -270,7 +233,7 @@ export default function HomePage() {
 
           {/* Dashboard Image Container */}
           <motion.div
-            className="relative bg-gray-900 dark:bg-gray-800 rounded-2xl lg:rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden backdrop-blur-sm"
+            className="relative max-sm:mx-2 bg-gray-900 dark:bg-gray-800 rounded-2xl lg:rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden backdrop-blur-sm"
             whileHover={{ scale: 1.02, y: -10 }}
             transition={{ duration: 0.3 }}
           >
@@ -324,28 +287,36 @@ export default function HomePage() {
                 transition={{ duration: 0.3 }}
               >
                 <Image
-                  src="/dashboard.png"
+                  src="/dashboard-light.png"
                   alt="Healthcare Buddy Dashboard"
                   width={1200}
                   height={800}
-                  className="w-full h-auto object-cover"
+                  className="w-full h-auto object-cover dark:hidden"
+                  priority
+                />
+                <Image
+                  src="/dashboard-dark.png"
+                  alt="Healthcare Buddy Dashboard"
+                  width={1200}
+                  height={800}
+                  className="w-full h-auto object-cover hidden dark:block"
                   priority
                 />
               </motion.div>
 
               {/* Animated overlay gradient */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-gray-900/20 via-transparent to-transparent"
+              {/* <motion.div
+                className="absolute inset-0 bg-gradient-to-t from-gray-900/30 via-transparent to-transparent dark:from-gray-800/40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.0, delay: 2.2 }}
-              />
+              /> */}
 
-              {/* Subtle animated glow effect */}
+              {/* Enhanced animated glow effect */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-teal-500/10 rounded-lg"
+                className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/15 to-teal-500/20 dark:from-blue-400/25 dark:via-purple-400/20 dark:to-teal-400/25 rounded-lg"
                 animate={{
-                  opacity: [0, 0.3, 0],
+                  opacity: [0.2, 0.5, 0.2],
                   scale: [0.98, 1.02, 0.98],
                 }}
                 transition={{
@@ -360,7 +331,7 @@ export default function HomePage() {
 
         {/* Enhanced Feature highlights */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 max-w-4xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 max-w-4xl mx-auto max-sm:mx-2"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.4 }}
@@ -431,7 +402,6 @@ export default function HomePage() {
           </motion.div>
         </motion.div>
       </section>
-
       {/* Key Features Section */}
       <motion.section
         className="space-y-12"
@@ -478,7 +448,7 @@ export default function HomePage() {
           </motion.div>
         </motion.div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 max-sm:px-2">
           {[
             {
               icon: Brain,
@@ -551,10 +521,8 @@ export default function HomePage() {
           ))}
         </div>
       </motion.section>
-
-      {/* The Science Behind Our AI */}
       <motion.section
-        className="bg-gray-50 dark:bg-gray-900/50 rounded-2xl p-8 lg:p-12 space-y-6"
+        className="bg-gray-50 dark:bg-gray-900/50 rounded-2xl p-8 lg:p-12 space-y-6 max-sm:mx-2"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -583,7 +551,6 @@ export default function HomePage() {
           outcomes to ensure accuracy and effectiveness.{" "}
         </motion.p>
       </motion.section>
-
       {/* Integration Section */}
       <motion.section
         className="space-y-8"
@@ -623,10 +590,9 @@ export default function HomePage() {
           </motion.p>
         </motion.div>
       </motion.section>
-
       {/* FAQ Section */}
       <motion.section
-        className="space-y-8"
+        className="space-y-8 max-sm:mx-2"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -674,10 +640,8 @@ export default function HomePage() {
           ))}
         </motion.div>
       </motion.section>
-
-      {/* Trusted by Healthcare Professionals */}
       <motion.section
-        className="space-y-8"
+        className="space-y-8 max-sm:mx-2"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -766,7 +730,6 @@ export default function HomePage() {
           ))}
         </div>
       </motion.section>
-
       {/* Final CTA */}
       <motion.section
         className="text-center space-y-6 py-16 bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-900/20 dark:to-teal-900/20 rounded-2xl"
