@@ -116,7 +116,7 @@ export default function HomePage() {
                 repeatType: "reverse",
               }}
             />
-            Introducing Support For AI Models
+            Powered by AI that actually gets it
           </motion.div>
 
           {/* Main Heading */}
@@ -132,14 +132,14 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              Modern Solutions for{" "}
+              Your recovery journey,{" "}
               <motion.span
                 className="block text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-teal-400 bg-clip-text"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
               >
-                Patient Engagement
+                made simple
               </motion.span>
             </motion.h1>
 
@@ -149,8 +149,10 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.0 }}
             >
-              Highly customizable components for building modern healthcare
-              applications that look and feel the way you mean it.
+              We know recovering can feel overwhelming. That&apos;s why we built
+              an AI companion that understands your medical documents, tracks
+              your progress, and gives you the confidence to take charge of your
+              health—one step at a time.
             </motion.p>
           </motion.div>
 
@@ -168,7 +170,9 @@ export default function HomePage() {
                 className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 px-8 py-4 text-lg font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Link href={isAutheticated ? "/dashboard" : "/sign-up"}>
-                  {isAutheticated ? "Go to Dashboard" : "Start Building"}
+                  {isAutheticated
+                    ? "Continue your journey"
+                    : "Start your recovery"}
                 </Link>
               </Button>
             </motion.div>
@@ -179,7 +183,7 @@ export default function HomePage() {
                 asChild
                 className="px-8 py-4 text-lg font-medium rounded-lg transition-all duration-200"
               >
-                <Link href="/ai-assistant">Ai Assistant</Link>
+                <Link href="/ai-assistant">Chat with AI</Link>
               </Button>
             </motion.div>
           </motion.div>
